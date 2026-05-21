@@ -2,7 +2,10 @@
 
 HTML, CSS, JavaScript で作成したシンプルな「まちがいさがし」ゲームです。GitHub Pages で簡単に公開できるように設計されています。
 
-## プロジェクトURL
+## 公開URL
+[https://f226t140-cmd.github.io/my-app20260515/](https://f226t140-cmd.github.io/my-app20260515/)
+
+## プロジェクトリポジトリ
 [https://github.com/f226t140-cmd/my-app20260515](https://github.com/f226t140-cmd/my-app20260515)
 
 ## 遊び方
