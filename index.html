@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>まちがいさがし！</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>まちがいさがし</h1>
+        
+        <div class="ui-panel">
+            <div class="info">
+                <span>のこり時間: <span id="timer">60</span>秒</span>
+                <span>みつけた数: <span id="score">0</span> / <span id="total-diffs">5</span></span>
+            </div>
+            <button id="reset-btn">リセット</button>
+        </div>
+
+        <div class="game-area" id="game-area">
+            <div class="image-wrapper" id="wrapper-1">
+                <img src="https://picsum.photos/id/10/600/400" alt="画像1" id="img-1">
+                <div class="marker-layer" id="layer-1"></div>
+            </div>
+            <div class="image-wrapper" id="wrapper-2">
+                <img src="https://picsum.photos/id/10/600/400" alt="画像2" id="img-2" style="filter: sepia(0.2);">
+                <div class="marker-layer" id="layer-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay" class="overlay hidden">
+        <div class="message-box">
+            <h2 id="result-title"></h2>
+            <p id="result-message"></p>
+            <button id="start-btn">もういちど遊ぶ</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
