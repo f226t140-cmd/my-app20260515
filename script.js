@@ -8,13 +8,18 @@ const allPossibleDifferences = [
     { x: 40, y: 45, emoji: '🐥' },
     { x: 20, y: 85, emoji: '🍦' },
     { x: 60, y: 55, emoji: '🚀' },
-    { x: 10, y: 45, emoji: '🦋' }
+    { x: 10, y: 45, emoji: '🦋' },
+    { x: 30, y: 30, emoji: '🍀' },
+    { x: 75, y: 20, emoji: '💎' },
+    { x: 50, y: 75, emoji: '👻' },
+    { x: 90, y: 40, emoji: '🐝' },
+    { x: 15, y: 60, emoji: '🐸' }
 ];
 
 const difficultySettings = {
     easy: { time: 100, count: 3, threshold: 15, label: 'かんたん' },
     normal: { time: 60, count: 5, threshold: 10, label: 'ふつう' },
-    hard: { time: 30, count: 8, threshold: 6, label: 'むずかしい' }
+    hard: { time: 20, count: 12, threshold: 4, label: 'むずかしい' }
 };
 
 let currentDiffs = [];
