@@ -194,6 +194,21 @@ button:active {
     margin-bottom: 30px;
 }
 
+.difficulty-selection {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.diff-btn[data-level="easy"] { background-color: #7bed9f; }
+.diff-btn[data-level="normal"] { background-color: #70a1ff; }
+.diff-btn[data-level="hard"] { background-color: #ff4757; }
+
+.hidden {
+    display: none !important;
+}
+
 @media (max-width: 800px) {
     .game-area {
         flex-direction: column;

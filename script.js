@@ -1,15 +1,28 @@
-const differences = [
-    { x: 20, y: 35, found: false, emoji: '🍎' },
-    { x: 55, y: 20, found: false, emoji: '⭐️' },
-    { x: 85, y: 50, found: false, emoji: '🎈' },
-    { x: 30, y: 75, found: false, emoji: '🐱' },
-    { x: 70, y: 80, found: false, emoji: '🍭' }
+const allPossibleDifferences = [
+    { x: 15, y: 20, emoji: '🍎' },
+    { x: 45, y: 15, emoji: '⭐️' },
+    { x: 80, y: 30, emoji: '🎈' },
+    { x: 25, y: 65, emoji: '🐱' },
+    { x: 65, y: 85, emoji: '🍭' },
+    { x: 85, y: 70, emoji: '🍄' },
+    { x: 40, y: 45, emoji: '🐥' },
+    { x: 20, y: 85, emoji: '🍦' },
+    { x: 60, y: 55, emoji: '🚀' },
+    { x: 10, y: 45, emoji: '🦋' }
 ];
 
+const difficultySettings = {
+    easy: { time: 100, count: 3, threshold: 15, label: 'かんたん' },
+    normal: { time: 60, count: 5, threshold: 10, label: 'ふつう' },
+    hard: { time: 30, count: 8, threshold: 6, label: 'むずかしい' }
+};
+
+let currentDiffs = [];
 let score = 0;
 let timeLeft = 60;
 let timerInterval;
-let isGameOver = false;
+let isGameOver = true;
+let currentLevel = 'normal';
 
 const timerEl = document.getElementById('timer');
 const scoreEl = document.getElementById('score');
@@ -20,20 +33,31 @@ const resultTitle = document.getElementById('result-title');
 const resultMessage = document.getElementById('result-message');
 const resetBtn = document.getElementById('reset-btn');
 const startBtn = document.getElementById('start-btn');
+const diffSelection = document.querySelector('.difficulty-selection');
 const layers = [document.getElementById('layer-1'), document.getElementById('layer-2')];
 
-function initGame() {
+function initGame(level) {
+    currentLevel = level || currentLevel;
+    const settings = difficultySettings[currentLevel];
+    
     score = 0;
-    timeLeft = 60;
+    timeLeft = settings.time;
     isGameOver = false;
-    differences.forEach(d => d.found = false);
+    
+    // Select random differences from the pool
+    currentDiffs = [...allPossibleDifferences]
+        .sort(() => 0.5 - Math.random())
+        .slice(0, settings.count)
+        .map(d => ({ ...d, found: false }));
     
     scoreEl.textContent = score;
-    totalDiffsEl.textContent = differences.length;
+    totalDiffsEl.textContent = currentDiffs.length;
     timerEl.textContent = timeLeft;
     
     layers.forEach(layer => layer.innerHTML = '');
     overlay.classList.add('hidden');
+    startBtn.classList.add('hidden');
+    diffSelection.classList.add('hidden');
     
     createDifferences();
     
@@ -42,8 +66,7 @@ function initGame() {
 }
 
 function createDifferences() {
-    // Only add visible emojis to the second layer (the "modified" image)
-    differences.forEach(diff => {
+    currentDiffs.forEach(diff => {
         const item = document.createElement('div');
         item.className = 'diff-item';
         item.textContent = diff.emoji;
@@ -71,19 +94,19 @@ function handleImageClick(e) {
     const y = ((e.clientY - rect.top) / rect.height) * 100;
 
     let foundAny = false;
-    const threshold = 12; // Click tolerance in percentage (Increased for gentler judgment)
+    const settings = difficultySettings[currentLevel];
 
-    differences.forEach((diff, index) => {
+    currentDiffs.forEach((diff) => {
         if (!diff.found) {
             const distance = Math.sqrt(Math.pow(diff.x - x, 2) + Math.pow(diff.y - y, 2));
-            if (distance < threshold) {
+            if (distance < settings.threshold) {
                 diff.found = true;
                 score++;
                 scoreEl.textContent = score;
                 addMarkers(diff.x, diff.y);
                 foundAny = true;
                 
-                if (score === differences.length) {
+                if (score === currentDiffs.length) {
                     endGame(true);
                 }
             }
@@ -117,12 +140,15 @@ function endGame(isWin) {
     clearInterval(timerInterval);
     
     overlay.classList.remove('hidden');
+    diffSelection.classList.remove('hidden');
+    startBtn.classList.remove('hidden');
+    
     if (isWin) {
         resultTitle.textContent = "おめでとう！";
-        resultMessage.textContent = "すべての間違いをみつけました！";
+        resultMessage.textContent = `${difficultySettings[currentLevel].label}をクリアしたよ！`;
     } else {
         resultTitle.textContent = "タイムアップ";
-        resultMessage.textContent = "残念！時間切れです。";
+        resultMessage.textContent = "ざんねん！つぎはがんばろう！";
     }
 }
 
@@ -130,8 +156,21 @@ document.querySelectorAll('.image-wrapper').forEach(wrapper => {
     wrapper.addEventListener('click', handleImageClick);
 });
 
-resetBtn.addEventListener('click', initGame);
-startBtn.addEventListener('click', initGame);
+resetBtn.addEventListener('click', () => {
+    isGameOver = true;
+    clearInterval(timerInterval);
+    overlay.classList.remove('hidden');
+    diffSelection.classList.remove('hidden');
+    startBtn.classList.add('hidden');
+    resultTitle.textContent = "まちがいさがし！";
+    resultMessage.textContent = "なんいどをえらんでね";
+});
 
-// Start game on load
-window.addEventListener('load', initGame);
+startBtn.addEventListener('click', () => initGame(currentLevel));
+
+document.querySelectorAll('.diff-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const level = btn.getAttribute('data-level');
+        initGame(level);
+    });
+});
