@@ -71,7 +71,7 @@ function handleImageClick(e) {
     const y = ((e.clientY - rect.top) / rect.height) * 100;
 
     let foundAny = false;
-    const threshold = 6; // Click tolerance in percentage
+    const threshold = 12; // Click tolerance in percentage (Increased for gentler judgment)
 
     differences.forEach((diff, index) => {
         if (!diff.found) {
