@@ -1,9 +1,9 @@
 const differences = [
-    { x: 20, y: 30, found: false },
-    { x: 50, y: 15, found: false },
-    { x: 80, y: 45, found: false },
-    { x: 35, y: 70, found: false },
-    { x: 65, y: 85, found: false }
+    { x: 20, y: 35, found: false, emoji: '🍎' },
+    { x: 55, y: 20, found: false, emoji: '⭐️' },
+    { x: 85, y: 50, found: false, emoji: '🎈' },
+    { x: 30, y: 75, found: false, emoji: '🐱' },
+    { x: 70, y: 80, found: false, emoji: '🍭' }
 ];
 
 let score = 0;
@@ -35,8 +35,22 @@ function initGame() {
     layers.forEach(layer => layer.innerHTML = '');
     overlay.classList.add('hidden');
     
+    createDifferences();
+    
     clearInterval(timerInterval);
     startTimer();
+}
+
+function createDifferences() {
+    // Only add visible emojis to the second layer (the "modified" image)
+    differences.forEach(diff => {
+        const item = document.createElement('div');
+        item.className = 'diff-item';
+        item.textContent = diff.emoji;
+        item.style.left = `${diff.x}%`;
+        item.style.top = `${diff.y}%`;
+        layers[1].appendChild(item);
+    });
 }
 
 function startTimer() {
@@ -57,7 +71,7 @@ function handleImageClick(e) {
     const y = ((e.clientY - rect.top) / rect.height) * 100;
 
     let foundAny = false;
-    const threshold = 5; // Click tolerance in percentage
+    const threshold = 6; // Click tolerance in percentage
 
     differences.forEach((diff, index) => {
         if (!diff.found) {
