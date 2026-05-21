@@ -17,14 +17,14 @@ const allPossibleDifferences = [
 ];
 
 const difficultySettings = {
-    easy: { time: 100, count: 3, threshold: 15, label: 'かんたん' },
-    normal: { time: 60, count: 5, threshold: 10, label: 'ふつう' },
-    hard: { time: 20, count: 12, threshold: 4, label: 'むずかしい' }
+    easy: { count: 3, threshold: 15, label: 'かんたん' },
+    normal: { count: 5, threshold: 10, label: 'ふつう' },
+    hard: { count: 12, threshold: 4, label: 'むずかしい' }
 };
 
 let currentDiffs = [];
 let score = 0;
-let timeLeft = 60;
+let timeElapsed = 0;
 let timerInterval;
 let isGameOver = true;
 let currentLevel = 'normal';
@@ -46,7 +46,7 @@ function initGame(level) {
     const settings = difficultySettings[currentLevel];
     
     score = 0;
-    timeLeft = settings.time;
+    timeElapsed = 0;
     isGameOver = false;
     
     // Select random differences from the pool
@@ -57,7 +57,7 @@ function initGame(level) {
     
     scoreEl.textContent = score;
     totalDiffsEl.textContent = currentDiffs.length;
-    timerEl.textContent = timeLeft;
+    timerEl.textContent = timeElapsed;
     
     layers.forEach(layer => layer.innerHTML = '');
     overlay.classList.add('hidden');
@@ -83,11 +83,8 @@ function createDifferences() {
 
 function startTimer() {
     timerInterval = setInterval(() => {
-        timeLeft--;
-        timerEl.textContent = timeLeft;
-        if (timeLeft <= 0) {
-            endGame(false);
-        }
+        timeElapsed++;
+        timerEl.textContent = timeElapsed;
     }, 1000);
 }
 
@@ -149,11 +146,8 @@ function endGame(isWin) {
     startBtn.classList.remove('hidden');
     
     if (isWin) {
-        resultTitle.textContent = "おめでとう！";
-        resultMessage.textContent = `${difficultySettings[currentLevel].label}をクリアしたよ！`;
-    } else {
-        resultTitle.textContent = "タイムアップ";
-        resultMessage.textContent = "ざんねん！つぎはがんばろう！";
+        resultTitle.textContent = "クリア！";
+        resultMessage.textContent = `${difficultySettings[currentLevel].label}を${timeElapsed}秒でクリアしたよ！`;
     }
 }
 

@@ -95,7 +95,7 @@ button:active {
 
 .image-wrapper {
     position: relative;
-    cursor: url('https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f50d.png'), crosshair;
+    cursor: url('image.png') 32 32, auto;
     line-height: 0;
     border: 5px solid white;
     border-radius: 20px;
