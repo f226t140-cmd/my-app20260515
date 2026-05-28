@@ -16,6 +16,18 @@ document.addEventListener('DOMContentLoaded', () => {
         hard: { count: 12, threshold: 4, label: '深淵' }
     };
 
+    const sealMap = {
+        easy: '💠',
+        normal: '🌀',
+        hard: '👁️'
+    };
+
+    const bgImageMap = {
+        easy: 'https://images.unsplash.com/photo-1505118380757-91f5f45d8de4?auto=format&fit=crop&q=80&w=800',
+        normal: 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&q=80&w=800',
+        hard: 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?auto=format&fit=crop&q=80&w=800'
+    };
+
     // --- State ---
     let currentDiffs = [];
     let score = 0;
@@ -25,7 +37,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentLevel = 'normal';
     let isMuted = false;
     let hasInteracted = false;
-    let sealsCount = parseInt(localStorage.getItem('sealsCount')) || 0;
+    
+    // Migrate sealsCount to seals array if necessary
+    let seals = JSON.parse(localStorage.getItem('seals')) || [];
+    const oldSealsCount = parseInt(localStorage.getItem('sealsCount')) || 0;
+    if (oldSealsCount > 0 && seals.length === 0) {
+        for (let i = 0; i < oldSealsCount; i++) seals.push('💮');
+        localStorage.removeItem('sealsCount');
+        localStorage.setItem('seals', JSON.stringify(seals));
+    }
 
     // --- DOM Elements ---
     const timerEl = document.getElementById('timer');
@@ -42,6 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const diffSelection = document.querySelector('.difficulty-selection');
     const layers = [document.getElementById('layer-1'), document.getElementById('layer-2')];
     const stampContainer = document.getElementById('stamp-container');
+    const img1 = document.getElementById('img-1');
+    const img2 = document.getElementById('img-2');
 
     // --- Functions ---
 
@@ -83,6 +105,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!settings) {
             console.error("無効な深度です:", level);
             return;
+        }
+
+        // 背景画像の更新
+        if (img1 && img2 && bgImageMap[currentLevel]) {
+            img1.src = bgImageMap[currentLevel];
+            img2.src = bgImageMap[currentLevel];
         }
 
         score = 0;
@@ -224,21 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = e.target.closest('.diff-btn');
             if (btn) {
                 const level = btn.getAttribute('data-level');
-                initGame(level);
-            }
-        });
-    }
-
-    if (muteBtn && bgm) {
-        muteBtn.addEventListener('click', () => {
-            isMuted = !isMuted;
-            bgm.muted = isMuted;
-            muteBtn.textContent = isMuted ? '🔇' : '🔊';
-            console.log(isMuted ? "深淵の音が止んだ" : "再び音が響き始めた");
-        });
-    }
-});
-tribute('data-level');
                 initGame(level);
             }
         });
