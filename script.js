@@ -1,19 +1,19 @@
 const allPossibleDifferences = [
-    { x: 15, y: 20, emoji: '👁️' },
-    { x: 45, y: 15, emoji: '🕸️' },
-    { x: 80, y: 30, emoji: '🕯️' },
-    { x: 25, y: 65, emoji: '🗝️' },
-    { x: 65, y: 85, emoji: '🌒' },
-    { x: 85, y: 70, emoji: '🏺' },
-    { x: 40, y: 45, emoji: '💀' },
-    { x: 20, y: 85, emoji: '🧿' },
-    { x: 60, y: 55, emoji: '📜' },
-    { x: 10, y: 45, emoji: '🦋' },
-    { x: 30, y: 30, emoji: '🥀' },
-    { x: 75, y: 20, emoji: '💎' },
-    { x: 50, y: 75, emoji: '👻' },
-    { x: 90, y: 40, emoji: '🪐' },
-    { x: 15, y: 60, emoji: '🌑' }
+    { x: 15, y: 20 },
+    { x: 45, y: 15 },
+    { x: 80, y: 30 },
+    { x: 25, y: 65 },
+    { x: 65, y: 85 },
+    { x: 85, y: 70 },
+    { x: 40, y: 45 },
+    { x: 20, y: 85 },
+    { x: 60, y: 55 },
+    { x: 10, y: 45 },
+    { x: 30, y: 30 },
+    { x: 75, y: 20 },
+    { x: 50, y: 75 },
+    { x: 90, y: 40 },
+    { x: 15, y: 60 }
 ];
 
 const difficultySettings = {
@@ -38,10 +38,20 @@ const resultTitle = document.getElementById('result-title');
 const resultMessage = document.getElementById('result-message');
 const resetBtn = document.getElementById('reset-btn');
 const startBtn = document.getElementById('start-btn');
+const muteBtn = document.getElementById('mute-btn');
+const bgm = document.getElementById('bgm');
 const diffSelection = document.querySelector('.difficulty-selection');
 const layers = [document.getElementById('layer-1'), document.getElementById('layer-2')];
 
+let isMuted = false;
+let hasInteracted = false;
+
 function initGame(level) {
+    if (!hasInteracted && bgm) {
+        bgm.play().catch(e => console.log("Autoplay blocked"));
+        hasInteracted = true;
+    }
+
     currentLevel = level || currentLevel;
     const settings = difficultySettings[currentLevel];
     
@@ -178,9 +188,4 @@ muteBtn.addEventListener('click', () => {
     isMuted = !isMuted;
     bgm.muted = isMuted;
     muteBtn.textContent = isMuted ? '🔇' : '🔊';
-});
-dEventListener('click', () => {
-        const level = btn.getAttribute('data-level');
-        initGame(level);
-    });
 });
