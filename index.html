@@ -15,8 +15,13 @@
                 <span>刻まれた刻限: <span id="timer">0</span> 拍</span>
                 <span>暴かれた違和感: <span id="score">0</span> / <span id="total-diffs">5</span></span>
             </div>
-            <button id="reset-btn">回帰</button>
+            <div class="controls">
+                <button id="mute-btn" title="調律">🔊</button>
+                <button id="reset-btn">回帰</button>
+            </div>
         </div>
+
+        <audio id="bgm" src="After_the_Last_Click.mp3" loop></audio>
 
         <div class="game-area" id="game-area">
             <div class="image-wrapper" id="wrapper-1">

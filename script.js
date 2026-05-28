@@ -173,3 +173,14 @@ document.querySelectorAll('.diff-btn').forEach(btn => {
         initGame(level);
     });
 });
+
+muteBtn.addEventListener('click', () => {
+    isMuted = !isMuted;
+    bgm.muted = isMuted;
+    muteBtn.textContent = isMuted ? '🔇' : '🔊';
+});
+dEventListener('click', () => {
+        const level = btn.getAttribute('data-level');
+        initGame(level);
+    });
+});

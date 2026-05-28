@@ -57,6 +57,16 @@ h1 {
     border-left: 5px solid var(--primary-color);
 }
 
+.controls {
+    display: flex;
+    gap: 10px;
+}
+
+#mute-btn {
+    padding: 10px;
+    min-width: 50px;
+}
+
 .info {
     font-size: 1.1rem;
     letter-spacing: 0.1rem;
