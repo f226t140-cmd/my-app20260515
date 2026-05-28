@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const bgImageMap = {
-        easy: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80&w=800&h=500',
+        easy: 'https://images.unsplash.com/photo-1505673539012-ee7169daaf5e?auto=format&fit=crop&q=80&w=800&h=500',
         normal: 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&q=80&w=800&h=500',
         hard: 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?auto=format&fit=crop&q=80&w=800&h=500'
     };
