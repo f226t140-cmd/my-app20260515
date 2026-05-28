@@ -22,6 +22,7 @@ let isGameOver = true;
 let currentLevel = 'normal';
 let isMuted = false;
 let hasInteracted = false;
+let sealsCount = parseInt(localStorage.getItem('sealsCount')) || 0;
 
 // --- DOM Elements ---
 const timerEl = document.getElementById('timer');
@@ -38,17 +39,6 @@ const bgm = document.getElementById('bgm');
 const diffSelection = document.querySelector('.difficulty-selection');
 const layers = [document.getElementById('layer-1'), document.getElementById('layer-2')];
 const stampContainer = document.getElementById('stamp-container');
-
-// --- State ---
-let currentDiffs = [];
-let score = 0;
-let timeElapsed = 0;
-let timerInterval;
-let isGameOver = true;
-let currentLevel = 'normal';
-let isMuted = false;
-let hasInteracted = false;
-let sealsCount = parseInt(localStorage.getItem('sealsCount')) || 0;
 
 // --- Functions ---
 
@@ -73,6 +63,7 @@ function addSeal() {
 }
 
 function initGame(level) {
+    console.log("Initializing game at level:", level);
     if (!hasInteracted && bgm) {
         bgm.play().catch(err => console.warn("BGM play failed:", err));
         hasInteracted = true;
