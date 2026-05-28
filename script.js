@@ -48,20 +48,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function displaySeals() {
         if (!stampContainer) return;
         stampContainer.innerHTML = '';
-        for (let i = 0; i < sealsCount; i++) {
+        seals.forEach(emoji => {
             const seal = document.createElement('span');
             seal.className = 'stamp';
-            seal.textContent = '💮';
+            seal.textContent = emoji;
             stampContainer.appendChild(seal);
-        }
+        });
     }
 
-    function addSeal() {
-        sealsCount++;
-        localStorage.setItem('sealsCount', sealsCount);
+    function addSeal(level) {
+        const emoji = sealMap[level] || '💮';
+        seals.push(emoji);
+        localStorage.setItem('seals', JSON.stringify(seals));
         const seal = document.createElement('span');
         seal.className = 'stamp';
-        seal.textContent = '💮';
+        seal.textContent = emoji;
         if (stampContainer) stampContainer.appendChild(seal);
     }
 
@@ -190,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isWin && resultTitle && resultMessage) {
             resultTitle.textContent = "解明";
             resultMessage.textContent = `${difficultySettings[currentLevel].label}の真実を、${timeElapsed}拍で暴き出した。`;
-            addSeal();
+            addSeal(currentLevel);
         }
     }
 
@@ -223,6 +224,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = e.target.closest('.diff-btn');
             if (btn) {
                 const level = btn.getAttribute('data-level');
+                initGame(level);
+            }
+        });
+    }
+
+    if (muteBtn && bgm) {
+        muteBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            bgm.muted = isMuted;
+            muteBtn.textContent = isMuted ? '🔇' : '🔊';
+            console.log(isMuted ? "深淵の音が止んだ" : "再び音が響き始めた");
+        });
+    }
+});
+tribute('data-level');
                 initGame(level);
             }
         });
