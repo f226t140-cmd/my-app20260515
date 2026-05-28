@@ -1,10 +1,10 @@
 // --- Configuration ---
 const allPossibleDifferences = [
-    { x: 15, y: 20 }, { x: 45, y: 15 }, { x: 80, y: 30 },
-    { x: 25, y: 65 }, { x: 65, y: 85 }, { x: 85, y: 70 },
-    { x: 40, y: 45 }, { x: 20, y: 85 }, { x: 60, y: 55 },
-    { x: 10, y: 45 }, { x: 30, y: 30 }, { x: 75, y: 20 },
-    { x: 50, y: 75 }, { x: 90, y: 40 }, { x: 15, y: 60 }
+    { x: 15, y: 20, emoji: '👁️' }, { x: 45, y: 15, emoji: '🕸️' }, { x: 80, y: 30, emoji: '🕯️' },
+    { x: 25, y: 65, emoji: '🗝️' }, { x: 65, y: 85, emoji: '🌒' }, { x: 85, y: 70, emoji: '🏺' },
+    { x: 40, y: 45, emoji: '💀' }, { x: 20, y: 85, emoji: '🧿' }, { x: 60, y: 55, emoji: '📜' },
+    { x: 10, y: 45, emoji: '🦋' }, { x: 30, y: 30, emoji: '🥀' }, { x: 75, y: 20, emoji: '💎' },
+    { x: 50, y: 75, emoji: '👻' }, { x: 90, y: 40, emoji: '🪐' }, { x: 15, y: 60, emoji: '🌑' }
 ];
 
 const difficultySettings = {
@@ -41,9 +41,6 @@ const layers = [document.getElementById('layer-1'), document.getElementById('lay
 // --- Functions ---
 
 function initGame(level) {
-    console.log("Initializing game at level:", level);
-    
-    // Attempt BGM playback on first interaction
     if (!hasInteracted && bgm) {
         bgm.play().catch(err => console.warn("BGM play failed:", err));
         hasInteracted = true;
@@ -187,19 +184,8 @@ if (startBtn) {
 
 document.querySelectorAll('.diff-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevent potential bubbling issues
+        e.stopPropagation();
         const level = btn.getAttribute('data-level');
-        initGame(level);
-    });
-});
-
-if (muteBtn && bgm) {
-    muteBtn.addEventListener('click', () => {
-        isMuted = !isMuted;
-        bgm.muted = isMuted;
-        muteBtn.textContent = isMuted ? '🔇' : '🔊';
-    });
-}
         initGame(level);
     });
 });
