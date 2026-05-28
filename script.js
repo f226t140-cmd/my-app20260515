@@ -1,19 +1,10 @@
+// --- Configuration ---
 const allPossibleDifferences = [
-    { x: 15, y: 20 },
-    { x: 45, y: 15 },
-    { x: 80, y: 30 },
-    { x: 25, y: 65 },
-    { x: 65, y: 85 },
-    { x: 85, y: 70 },
-    { x: 40, y: 45 },
-    { x: 20, y: 85 },
-    { x: 60, y: 55 },
-    { x: 10, y: 45 },
-    { x: 30, y: 30 },
-    { x: 75, y: 20 },
-    { x: 50, y: 75 },
-    { x: 90, y: 40 },
-    { x: 15, y: 60 }
+    { x: 15, y: 20 }, { x: 45, y: 15 }, { x: 80, y: 30 },
+    { x: 25, y: 65 }, { x: 65, y: 85 }, { x: 85, y: 70 },
+    { x: 40, y: 45 }, { x: 20, y: 85 }, { x: 60, y: 55 },
+    { x: 10, y: 45 }, { x: 30, y: 30 }, { x: 75, y: 20 },
+    { x: 50, y: 75 }, { x: 90, y: 40 }, { x: 15, y: 60 }
 ];
 
 const difficultySettings = {
@@ -22,13 +13,17 @@ const difficultySettings = {
     hard: { count: 12, threshold: 4, label: '深淵' }
 };
 
+// --- State ---
 let currentDiffs = [];
 let score = 0;
 let timeElapsed = 0;
 let timerInterval;
 let isGameOver = true;
 let currentLevel = 'normal';
+let isMuted = false;
+let hasInteracted = false;
 
+// --- DOM Elements ---
 const timerEl = document.getElementById('timer');
 const scoreEl = document.getElementById('score');
 const totalDiffsEl = document.getElementById('total-diffs');
@@ -43,18 +38,21 @@ const bgm = document.getElementById('bgm');
 const diffSelection = document.querySelector('.difficulty-selection');
 const layers = [document.getElementById('layer-1'), document.getElementById('layer-2')];
 
-let isMuted = false;
-let hasInteracted = false;
+// --- Functions ---
 
 function initGame(level) {
+    console.log("Initializing game at level:", level);
+    
+    // Attempt BGM playback on first interaction
     if (!hasInteracted && bgm) {
-        bgm.play().catch(e => console.log("Autoplay blocked"));
+        bgm.play().catch(err => console.warn("BGM play failed:", err));
         hasInteracted = true;
     }
 
     currentLevel = level || currentLevel;
     const settings = difficultySettings[currentLevel];
-    
+    if (!settings) return;
+
     score = 0;
     timeElapsed = 0;
     isGameOver = false;
@@ -65,14 +63,14 @@ function initGame(level) {
         .slice(0, settings.count)
         .map(d => ({ ...d, found: false }));
     
-    scoreEl.textContent = score;
-    totalDiffsEl.textContent = currentDiffs.length;
-    timerEl.textContent = timeElapsed;
+    if (scoreEl) scoreEl.textContent = score;
+    if (totalDiffsEl) totalDiffsEl.textContent = currentDiffs.length;
+    if (timerEl) timerEl.textContent = timeElapsed;
     
-    layers.forEach(layer => layer.innerHTML = '');
-    overlay.classList.add('hidden');
-    startBtn.classList.add('hidden');
-    diffSelection.classList.add('hidden');
+    layers.forEach(layer => { if (layer) layer.innerHTML = ''; });
+    if (overlay) overlay.classList.add('hidden');
+    if (startBtn) startBtn.classList.add('hidden');
+    if (diffSelection) diffSelection.classList.add('hidden');
     
     createDifferences();
     
@@ -81,6 +79,7 @@ function initGame(level) {
 }
 
 function createDifferences() {
+    if (!layers[1]) return;
     currentDiffs.forEach(diff => {
         const item = document.createElement('img');
         item.className = 'diff-item';
@@ -94,7 +93,7 @@ function createDifferences() {
 function startTimer() {
     timerInterval = setInterval(() => {
         timeElapsed++;
-        timerEl.textContent = timeElapsed;
+        if (timerEl) timerEl.textContent = timeElapsed;
     }, 1000);
 }
 
@@ -114,7 +113,7 @@ function handleImageClick(e) {
             if (distance < settings.threshold) {
                 diff.found = true;
                 score++;
-                scoreEl.textContent = score;
+                if (scoreEl) scoreEl.textContent = score;
                 addMarkers(diff.x, diff.y);
                 foundAny = true;
                 
@@ -132,6 +131,7 @@ function handleImageClick(e) {
 
 function addMarkers(x, y) {
     layers.forEach(layer => {
+        if (!layer) return;
         const marker = document.createElement('div');
         marker.className = 'marker';
         marker.style.left = `${x}%`;
@@ -141,51 +141,62 @@ function addMarkers(x, y) {
 }
 
 function triggerShake() {
-    gameArea.classList.add('shake');
-    setTimeout(() => {
-        gameArea.classList.remove('shake');
-    }, 500);
+    if (gameArea) {
+        gameArea.classList.add('shake');
+        setTimeout(() => {
+            gameArea.classList.remove('shake');
+        }, 500);
+    }
 }
 
 function endGame(isWin) {
     isGameOver = true;
     clearInterval(timerInterval);
     
-    overlay.classList.remove('hidden');
-    diffSelection.classList.remove('hidden');
-    startBtn.classList.remove('hidden');
+    if (overlay) overlay.classList.remove('hidden');
+    if (diffSelection) diffSelection.classList.remove('hidden');
+    if (startBtn) startBtn.classList.remove('hidden');
     
-    if (isWin) {
+    if (isWin && resultTitle && resultMessage) {
         resultTitle.textContent = "解明";
         resultMessage.textContent = `${difficultySettings[currentLevel].label}の真実を、${timeElapsed}拍で暴き出した。`;
     }
 }
 
+// --- Event Listeners ---
+
 document.querySelectorAll('.image-wrapper').forEach(wrapper => {
     wrapper.addEventListener('click', handleImageClick);
 });
 
-resetBtn.addEventListener('click', () => {
-    isGameOver = true;
-    clearInterval(timerInterval);
-    overlay.classList.remove('hidden');
-    diffSelection.classList.remove('hidden');
-    startBtn.classList.add('hidden');
-    resultTitle.textContent = "観測の儀";
-    resultMessage.textContent = "深淵の深さを選べ";
-});
+if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+        isGameOver = true;
+        clearInterval(timerInterval);
+        if (overlay) overlay.classList.remove('hidden');
+        if (diffSelection) diffSelection.classList.remove('hidden');
+        if (startBtn) startBtn.classList.add('hidden');
+        if (resultTitle) resultTitle.textContent = "観測の儀";
+        if (resultMessage) resultMessage.textContent = "深淵の深さを選べ";
+    });
+}
 
-startBtn.addEventListener('click', () => initGame(currentLevel));
+if (startBtn) {
+    startBtn.addEventListener('click', () => initGame(currentLevel));
+}
 
 document.querySelectorAll('.diff-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent potential bubbling issues
         const level = btn.getAttribute('data-level');
         initGame(level);
     });
 });
 
-muteBtn.addEventListener('click', () => {
-    isMuted = !isMuted;
-    bgm.muted = isMuted;
-    muteBtn.textContent = isMuted ? '🔇' : '🔊';
-});
+if (muteBtn && bgm) {
+    muteBtn.addEventListener('click', () => {
+        isMuted = !isMuted;
+        bgm.muted = isMuted;
+        muteBtn.textContent = isMuted ? '🔇' : '🔊';
+    });
+}
