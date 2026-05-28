@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const bgImageMap = {
-        easy: 'https://images.unsplash.com/photo-1505673539012-ee7169daaf5e?auto=format&fit=crop&q=80&w=800&h=500',
+        easy: 'https://images.unsplash.com/photo-1502657877623-f66bf489d236?auto=format&fit=crop&q=80&w=800&h=500',
         normal: 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&q=80&w=800&h=500',
         hard: 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?auto=format&fit=crop&q=80&w=800&h=500'
     };
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isMuted = false;
     let hasInteracted = false;
     
-    // Migrate sealsCount to seals array if necessary
+    // Migrate seals
     let seals = JSON.parse(localStorage.getItem('seals')) || [];
     const oldSealsCount = parseInt(localStorage.getItem('sealsCount')) || 0;
     if (oldSealsCount > 0 && seals.length === 0) {
@@ -95,22 +95,21 @@ document.addEventListener('DOMContentLoaded', () => {
             bgm.play().then(() => {
                 console.log("深淵の音が響き始めた");
             }).catch(err => {
-                console.warn("音の奏でに失敗しました（ブラウザの制限）:", err);
+                console.warn("音の奏でに失敗しました:", err);
             });
             hasInteracted = true;
         }
 
         currentLevel = level || currentLevel;
         const settings = difficultySettings[currentLevel];
-        if (!settings) {
-            console.error("無効な深度です:", level);
-            return;
-        }
+        if (!settings) return;
 
         // 背景画像の更新
-        if (img1 && img2 && bgImageMap[currentLevel]) {
-            img1.src = bgImageMap[currentLevel];
-            img2.src = bgImageMap[currentLevel];
+        const newSrc = bgImageMap[currentLevel];
+        if (img1 && img2 && newSrc) {
+            img1.src = newSrc;
+            img2.src = newSrc;
+            console.log("背景を更新:", newSrc);
         }
 
         score = 0;
@@ -246,7 +245,6 @@ document.addEventListener('DOMContentLoaded', () => {
         startBtn.addEventListener('click', () => initGame(currentLevel));
     }
 
-    // Event delegation for difficulty buttons to be more robust
     if (diffSelection) {
         diffSelection.addEventListener('click', (e) => {
             const btn = e.target.closest('.diff-btn');
@@ -262,7 +260,6 @@ document.addEventListener('DOMContentLoaded', () => {
             isMuted = !isMuted;
             bgm.muted = isMuted;
             muteBtn.textContent = isMuted ? '🔇' : '🔊';
-            console.log(isMuted ? "深淵の音が止んだ" : "再び音が響き始めた");
         });
     }
 });
