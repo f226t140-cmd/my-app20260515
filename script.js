@@ -1,25 +1,25 @@
 const allPossibleDifferences = [
-    { x: 15, y: 20, emoji: '🍎' },
-    { x: 45, y: 15, emoji: '⭐️' },
-    { x: 80, y: 30, emoji: '🎈' },
-    { x: 25, y: 65, emoji: '🐱' },
-    { x: 65, y: 85, emoji: '🍭' },
-    { x: 85, y: 70, emoji: '🍄' },
-    { x: 40, y: 45, emoji: '🐥' },
-    { x: 20, y: 85, emoji: '🍦' },
-    { x: 60, y: 55, emoji: '🚀' },
+    { x: 15, y: 20, emoji: '👁️' },
+    { x: 45, y: 15, emoji: '🕸️' },
+    { x: 80, y: 30, emoji: '🕯️' },
+    { x: 25, y: 65, emoji: '🗝️' },
+    { x: 65, y: 85, emoji: '🌒' },
+    { x: 85, y: 70, emoji: '🏺' },
+    { x: 40, y: 45, emoji: '💀' },
+    { x: 20, y: 85, emoji: '🧿' },
+    { x: 60, y: 55, emoji: '📜' },
     { x: 10, y: 45, emoji: '🦋' },
-    { x: 30, y: 30, emoji: '🍀' },
+    { x: 30, y: 30, emoji: '🥀' },
     { x: 75, y: 20, emoji: '💎' },
     { x: 50, y: 75, emoji: '👻' },
-    { x: 90, y: 40, emoji: '🐝' },
-    { x: 15, y: 60, emoji: '🐸' }
+    { x: 90, y: 40, emoji: '🪐' },
+    { x: 15, y: 60, emoji: '🌑' }
 ];
 
 const difficultySettings = {
-    easy: { count: 3, threshold: 15, label: 'かんたん' },
-    normal: { count: 5, threshold: 10, label: 'ふつう' },
-    hard: { count: 12, threshold: 4, label: 'むずかしい' }
+    easy: { count: 3, threshold: 15, label: '浅瀬' },
+    normal: { count: 5, threshold: 10, label: '中層' },
+    hard: { count: 12, threshold: 4, label: '深淵' }
 };
 
 let currentDiffs = [];
@@ -146,8 +146,8 @@ function endGame(isWin) {
     startBtn.classList.remove('hidden');
     
     if (isWin) {
-        resultTitle.textContent = "クリア！";
-        resultMessage.textContent = `${difficultySettings[currentLevel].label}を${timeElapsed}秒でクリアしたよ！`;
+        resultTitle.textContent = "解明";
+        resultMessage.textContent = `${difficultySettings[currentLevel].label}の真実を、${timeElapsed}拍で暴き出した。`;
     }
 }
 
@@ -161,8 +161,8 @@ resetBtn.addEventListener('click', () => {
     overlay.classList.remove('hidden');
     diffSelection.classList.remove('hidden');
     startBtn.classList.add('hidden');
-    resultTitle.textContent = "まちがいさがし！";
-    resultMessage.textContent = "なんいどをえらんでね";
+    resultTitle.textContent = "観測の儀";
+    resultMessage.textContent = "深淵の深さを選べ";
 });
 
 startBtn.addEventListener('click', () => initGame(currentLevel));

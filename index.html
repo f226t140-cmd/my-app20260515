@@ -8,23 +8,23 @@
 </head>
 <body>
     <div class="container">
-        <h1>まちがいさがし</h1>
+        <h1>虚構の裂け目</h1>
         
         <div class="ui-panel">
             <div class="info">
-                <span>経過時間: <span id="timer">0</span>秒</span>
-                <span>みつけた数: <span id="score">0</span> / <span id="total-diffs">5</span></span>
+                <span>刻まれた刻限: <span id="timer">0</span> 拍</span>
+                <span>暴かれた違和感: <span id="score">0</span> / <span id="total-diffs">5</span></span>
             </div>
-            <button id="reset-btn">リセット</button>
+            <button id="reset-btn">回帰</button>
         </div>
 
         <div class="game-area" id="game-area">
             <div class="image-wrapper" id="wrapper-1">
-                <img src="image.png" alt="画像1" id="img-1">
+                <img src="image.png" alt="真実" id="img-1">
                 <div class="marker-layer" id="layer-1"></div>
             </div>
             <div class="image-wrapper" id="wrapper-2">
-                <img src="image.png" alt="画像2" id="img-2">
+                <img src="image.png" alt="虚像" id="img-2">
                 <div class="marker-layer" id="layer-2"></div>
             </div>
         </div>
@@ -32,14 +32,14 @@
 
     <div id="overlay" class="overlay">
         <div class="message-box">
-            <h2 id="result-title">まちがいさがし！</h2>
-            <p id="result-message">なんいどをえらんでね</p>
+            <h2 id="result-title">観測の儀</h2>
+            <p id="result-message">深淵の深さを選べ</p>
             <div class="difficulty-selection">
-                <button class="diff-btn" data-level="easy">かんたん</button>
-                <button class="diff-btn" data-level="normal">ふつう</button>
-                <button class="diff-btn" data-level="hard">むずかしい</button>
+                <button class="diff-btn" data-level="easy">浅瀬</button>
+                <button class="diff-btn" data-level="normal">中層</button>
+                <button class="diff-btn" data-level="hard">深淵</button>
             </div>
-            <button id="start-btn" class="hidden">もういちど遊ぶ</button>
+            <button id="start-btn" class="hidden">再び、潜る</button>
         </div>
     </div>
 
