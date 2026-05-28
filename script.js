@@ -72,9 +72,9 @@ function initGame(level) {
 
 function createDifferences() {
     currentDiffs.forEach(diff => {
-        const item = document.createElement('div');
+        const item = document.createElement('img');
         item.className = 'diff-item';
-        item.textContent = diff.emoji;
+        item.src = 'image.png';
         item.style.left = `${diff.x}%`;
         item.style.top = `${diff.y}%`;
         layers[1].appendChild(item);
