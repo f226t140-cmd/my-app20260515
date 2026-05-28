@@ -37,8 +37,40 @@ const muteBtn = document.getElementById('mute-btn');
 const bgm = document.getElementById('bgm');
 const diffSelection = document.querySelector('.difficulty-selection');
 const layers = [document.getElementById('layer-1'), document.getElementById('layer-2')];
+const stampContainer = document.getElementById('stamp-container');
+
+// --- State ---
+let currentDiffs = [];
+let score = 0;
+let timeElapsed = 0;
+let timerInterval;
+let isGameOver = true;
+let currentLevel = 'normal';
+let isMuted = false;
+let hasInteracted = false;
+let sealsCount = parseInt(localStorage.getItem('sealsCount')) || 0;
 
 // --- Functions ---
+
+function displaySeals() {
+    if (!stampContainer) return;
+    stampContainer.innerHTML = '';
+    for (let i = 0; i < sealsCount; i++) {
+        const seal = document.createElement('span');
+        seal.className = 'stamp';
+        seal.textContent = '💮';
+        stampContainer.appendChild(seal);
+    }
+}
+
+function addSeal() {
+    sealsCount++;
+    localStorage.setItem('sealsCount', sealsCount);
+    const seal = document.createElement('span');
+    seal.className = 'stamp';
+    seal.textContent = '💮';
+    if (stampContainer) stampContainer.appendChild(seal);
+}
 
 function initGame(level) {
     if (!hasInteracted && bgm) {
@@ -157,10 +189,12 @@ function endGame(isWin) {
     if (isWin && resultTitle && resultMessage) {
         resultTitle.textContent = "解明";
         resultMessage.textContent = `${difficultySettings[currentLevel].label}の真実を、${timeElapsed}拍で暴き出した。`;
+        addSeal();
     }
 }
 
 // --- Event Listeners ---
+displaySeals();
 
 document.querySelectorAll('.image-wrapper').forEach(wrapper => {
     wrapper.addEventListener('click', handleImageClick);
