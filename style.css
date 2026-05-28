@@ -155,9 +155,7 @@ button:active {
 
 .diff-item {
     position: absolute;
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
+    font-size: 32px;
     transform: translate(-50%, -50%);
     pointer-events: none;
     user-select: none;

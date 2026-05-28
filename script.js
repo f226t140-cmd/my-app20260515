@@ -81,9 +81,9 @@ function initGame(level) {
 function createDifferences() {
     if (!layers[1]) return;
     currentDiffs.forEach(diff => {
-        const item = document.createElement('img');
+        const item = document.createElement('div');
         item.className = 'diff-item';
-        item.src = 'image.png';
+        item.textContent = diff.emoji;
         item.style.left = `${diff.x}%`;
         item.style.top = `${diff.y}%`;
         layers[1].appendChild(item);
@@ -189,6 +189,17 @@ document.querySelectorAll('.diff-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
         e.stopPropagation(); // Prevent potential bubbling issues
         const level = btn.getAttribute('data-level');
+        initGame(level);
+    });
+});
+
+if (muteBtn && bgm) {
+    muteBtn.addEventListener('click', () => {
+        isMuted = !isMuted;
+        bgm.muted = isMuted;
+        muteBtn.textContent = isMuted ? '🔇' : '🔊';
+    });
+}
         initGame(level);
     });
 });
